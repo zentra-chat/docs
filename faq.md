@@ -14,6 +14,6 @@ Zentra uses end-to-end encryption for direct messages and secure storage for ser
 
 ## Where can I get support?
 
-Visit our [support page](https://example.com/support) or join the official Zentra server.
+Visit our [support page](https://zentra.abstractmelon.net/support) or join the official Zentra server.
 
 If your question is not listed here, please contact support.
