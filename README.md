@@ -13,8 +13,3 @@ If you want to contribute to the documentation, you can do so by:
 3. Opening a pull request
 
 Please make sure to follow the [contribution guidelines](https://github.com/zentra-chat/zentra-docs/wiki/Contributing-to-Zentra).
-
-## License
-
-This documentation is licensed under the [MIT License](https://github.com/zentra-chat/zentra-docs/blob/main/LICENSE).
-
