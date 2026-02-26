@@ -137,7 +137,7 @@ Do **not** expose internal ports like `5432`, `6379`, or `9000` publicly.
 
 ### Nginx configs
 
-These are example configs from Zentra Main and should be adjusted for your own domain names and local ports.
+These are **example** configs from Zentra Main and should be adjusted for your own domains and local ports.
 
 Frontend domain (`zentra.abstractmelon.net`):
 
