@@ -16,7 +16,7 @@ Run these first on your server:
 
 ```bash
 sudo apt update
-sudo apt install -y git curl nginx certbot python3-certbot-nginx ca-certificates gnupg lsb-release
+sudo apt install -y git curl nginx certbot python3-certbot-nginx postgresql-client ca-certificates gnupg lsb-release
 curl -fsSL https://get.docker.com | sh
 sudo usermod -aG docker "$USER"
 ```
@@ -32,7 +32,6 @@ mkdir -p ~/Zentra && cd ~/Zentra
 git clone https://github.com/zentra-chat/peridotite.git backend
 git clone https://github.com/zentra-chat/selenite.git frontend
 git clone https://github.com/zentra-chat/zentra-docs.git docs
-git clone --recursive https://github.com/zentra-chat/zentra-desktop.git desktop
 ```
 
 ## Backend deploy script
@@ -137,6 +136,8 @@ If hosted behind a home router, forward only:
 Do **not** expose internal ports like `5432`, `6379`, or `9000` publicly.
 
 ### Nginx configs
+
+These are **example** configs from Zentra Main and should be adjusted for your own domains and local ports.
 
 Frontend domain (`zentra.abstractmelon.net`):
 
