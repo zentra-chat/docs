@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Zentra Documentation',
-  description: 'Clean, green, and fast documentation for the Zentra chat app',
+  description: 'Guides, installation, and API docs for Zentra',
   appearance: true, // Enables dark/light mode toggle
   cleanUrls: true,  // Optional: removes .html from URLs
 
@@ -10,7 +10,10 @@ export default defineConfig({
     logo: '/logo.png',
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'Dev Intro', link: '/development/introduction' },
+      { text: 'Local Setup', link: '/development/local-setup' },
       { text: 'Installation', link: '/installation' },
+      { text: 'Self-Hosting', link: '/self-hosting' },
       { text: 'Usage', link: '/usage' },
       { text: 'API', link: '/api' },
       { text: 'FAQ', link: '/faq' }
@@ -18,16 +21,25 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Getting Started',
+        text: 'Start',
         items: [
-          { text: 'Introduction', link: '/about' },
+          { text: 'Home', link: '/' },
+          { text: 'Development Introduction', link: '/development/introduction' },
+          { text: 'Local Development Setup', link: '/development/local-setup' },
+        ]
+      },
+      {
+        text: 'Install & Deploy',
+        items: [
           { text: 'Installation', link: '/installation' },
+          { text: 'Self-Hosting Guide', link: '/self-hosting' },
           { text: 'Usage Guide', link: '/usage' }
         ]
       },
       {
-        text: 'Advanced',
+        text: 'Reference',
         items: [
+          { text: 'About', link: '/about' },
           { text: 'API Reference', link: '/api' },
           { text: 'FAQ', link: '/faq' }
         ]

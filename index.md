@@ -1,29 +1,28 @@
----
-layout: home
+# Zentra Documentation
 
-title: Zentra Documentation
-description: Clean, reliable, and fast documentation for Zentra, the chat app
+Zentra is an open-source, encrypted, and self-hostable chat platform.
 
-hero:
-  name: Zentra
-  tagline: Documentation for the Zentra chat application
-  actions:
-    - theme: brand
-      text: Learn More
-      link: /about/
-    - theme: alt
-      text: Get Started
-      link: /getting-started/
+Use these docs to set up local development, self-host production infrastructure, and integrate with the API.
 
-features:
-  - title: Fast
-    details: Experience blazing fast performance with Zentra.
-  - title: Reliable
-    details: Count on Zentra to be up and running when you need it.
-  - title: Open Source
-    details: Zentra is open-source and community-driven.
+## Recommended Reading Order
 
-footer:
-  message: Powered by VitePress
-  copyright: Copyright © 2023 Zentra. All Rights Reserved.
----
+- [Development Introduction](/development/introduction)
+- [Local Development Setup](/development/local-setup)
+- [Installation](/installation)
+- [Self-Hosting Guide](/self-hosting)
+- [Usage Guide](/usage)
+- [API Reference](/api)
+- [FAQ](/faq)
+
+## What Zentra Includes
+
+- **Web frontend** built with SvelteKit
+- **Desktop app** built with Tauri
+- **Backend API** built in Go (Peridotite)
+- **PostgreSQL + Redis + MinIO** for storage, caching, and media
+
+## Need help fast?
+
+If you are setting up local development from scratch, begin with [Local Development Setup](/development/local-setup).
+
+If you are deploying for users, read [Self-Hosting Guide](/self-hosting) and backend deploy scripts in [backend/README.md](https://github.com/zentra-chat/peridotite).

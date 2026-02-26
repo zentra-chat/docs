@@ -1,24 +1,27 @@
 # About
 
-This is the about page of the Zentra documentation.
+Zentra is a modern chat platform focused on privacy, ownership, and self-hosting.
 
-Zentra is a modern, open-source, and self-hostable alternative to Discord.
+It is designed for communities that want Discord-like UX while keeping control over their infrastructure and data.
 
-## Our Mission
+## Project Goals
 
-Our mission is to provide a safe and open platform for communities to communicate and share ideas.
+- **Open source by default**: transparent code and community contributions
+- **Encrypted communication**: strong security posture and private DMs
+- **Self-hostable architecture**: run your own backend and frontend
+- **Cross-platform clients**: web and desktop support
 
-## Our Values
+## Main Components
 
-* Freedom: We believe that users should have control over their data and be able to choose how they want to use our platform.
-* Openness: We believe that open-source software is the best way to ensure that our platform is secure, transparent, and community-driven.
-* Community: We believe that communities should be able to choose how they want to run their servers and what features they want to use.
-* Safety: We believe that safety should be a top priority for any platform, and we take steps to ensure that our platform is safe and secure for all users.
+- **Backend (`peridotite`)**: Go API + WebSocket gateway
+- **Frontend (`selenite`)**: SvelteKit app
+- **Desktop app**: Tauri wrapper around the same frontend
+- **Data layer**: PostgreSQL, Redis, and MinIO
 
-## Get Involved
+## Where to Go Next
 
-If you want to get involved with Zentra, you can start by joining our community server. From there, you can get involved with development, provide feedback, or just hang out and chat with other users.
-
-## Contact Us
-
-If you have any questions or need help with anything, you can contact us at [hello@zentra.chat](mailto:hello@zentra.chat). We'll do our best to respond as quickly as possible.
+- New here? Read [Development Introduction](/development/introduction)
+- Setting up an instance? Use [Installation](/installation)
+- Hosting for real users? Read [Self-Hosting Guide](/self-hosting)
+- Building integrations? Open [API](/api)
+- Looking for common answers? Check [FAQ](/faq)

@@ -1,0 +1,248 @@
+# Self-Hosting Guide
+
+This page covers deploying Zentra for real usage, not just local dev.
+
+## What you need
+
+- A Linux host/VM
+- Public DNS entries for API and frontend
+- Nginx reverse proxy
+- TLS certificates (Let's Encrypt / Certbot)
+- Persistent storage for PostgreSQL and MinIO
+
+## Install commands
+
+Run these first on your server:
+
+```bash
+sudo apt update
+sudo apt install -y git curl nginx certbot python3-certbot-nginx ca-certificates gnupg lsb-release
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker "$USER"
+```
+
+Log out and back in so Docker group membership is applied.
+
+## Clone repos side-by-side
+
+Each folder is its own git repo. Clone them under one root:
+
+```bash
+mkdir -p ~/Zentra && cd ~/Zentra
+git clone https://github.com/zentra-chat/peridotite.git backend
+git clone https://github.com/zentra-chat/selenite.git frontend
+git clone https://github.com/zentra-chat/zentra-docs.git docs
+git clone --recursive https://github.com/zentra-chat/zentra-desktop.git desktop
+```
+
+## Backend deploy script
+
+Use the backend deployment script:
+
+```bash
+cd ~/Zentra/backend
+scripts/deploy-instance.sh deploy --name prod-main --domain https://api.example.com --skip-docker-install
+```
+
+### Backend script actions
+
+- `deploy` (default)
+- `rebuild-api`
+- `relaunch-api`
+- `wipe-db`
+- `update-restart`
+- `down`
+
+### Backend script arguments
+
+- `--name <instance>` (required)
+- `--domain <url>` (public API base URL)
+- `--api-port <port>` default `63566`
+- `--postgres-port <port>` default `5432`
+- `--redis-port <port>` default `6379`
+- `--minio-port <port>` default `9000`
+- `--minio-console-port <port>` default `9001`
+- `--cors-origins <csv>`
+- `--discord-import-token <token>`
+- `--force-regenerate-env`
+- `--skip-docker-install`
+
+Show help:
+
+```bash
+scripts/deploy-instance.sh --help
+```
+
+### Useful backend lifecycle commands
+
+```bash
+scripts/deploy-instance.sh rebuild-api --name prod-main
+scripts/deploy-instance.sh relaunch-api --name prod-main
+scripts/deploy-instance.sh update-restart --name prod-main
+scripts/deploy-instance.sh down --name prod-main
+```
+
+## Frontend deployment script
+
+```bash
+cd ~/Zentra/frontend
+./scripts/deploy-frontend.sh deploy \
+  --instance-url https://api.example.com \
+  --instance-name "Zentra Main" \
+  --port 4173
+```
+
+### Frontend script arguments
+
+Deploy action:
+
+- `--port <port>` (default `4173`)
+- `--instance-url <url>`
+- `--instance-name <name>`
+- `--skip-install`
+- `--skip-go-build`
+
+Update action:
+
+- `--branch <branch>` (default `main`)
+- `--remote <remote>` (default `origin`)
+- `--rebuild-go-host`
+
+Show help:
+
+```bash
+./scripts/deploy-frontend.sh --help
+```
+
+Fast update:
+
+```bash
+./scripts/deploy-frontend.sh update --branch main
+```
+
+## Reverse proxy / forwarding
+
+### Topology
+
+- `zentra.abstractmelon.net` -> frontend host (`localhost:3014` in your setup)
+- `zentra-main.abstractmelon.net` -> backend API (`localhost:63566` in your setup)
+
+### Home lab router forwarding
+
+If hosted behind a home router, forward only:
+
+- TCP `80` -> reverse proxy machine
+- TCP `443` -> reverse proxy machine
+
+Do **not** expose internal ports like `5432`, `6379`, or `9000` publicly.
+
+### Nginx configs
+
+Frontend domain (`zentra.abstractmelon.net`):
+
+```nginx
+server {
+    server_name zentra.abstractmelon.net;
+
+    location / {
+        proxy_pass http://localhost:3014;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+API domain (`zentra-main.abstractmelon.net`):
+
+```nginx
+server {
+    server_name zentra-main.abstractmelon.net;
+
+    location / {
+        proxy_pass http://localhost:63566;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /community-assets/ {
+        proxy_pass http://localhost:9000/community-assets/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /avatars/ {
+        proxy_pass http://localhost:9000/avatars/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /attachments/ {
+        proxy_pass http://localhost:9000/attachments/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+Enable + reload nginx:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/zentra.abstractmelon.net /etc/nginx/sites-enabled/zentra.abstractmelon.net
+sudo ln -s /etc/nginx/sites-available/zentra-main.abstractmelon.net /etc/nginx/sites-enabled/zentra-main.abstractmelon.net
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+## Let's Encrypt / Certbot commands
+
+Issue certs:
+
+```bash
+sudo certbot --nginx -d zentra.abstractmelon.net
+sudo certbot --nginx -d zentra-main.abstractmelon.net
+```
+
+Test renewal:
+
+```bash
+sudo certbot renew --dry-run
+```
+
+Check renewal timer:
+
+```bash
+systemctl list-timers | grep certbot
+```
+
+## Security checklist
+
+- Store secrets in env files and never commit them
+- Restrict firewall to `22`, `80`, `443`
+- Back up PostgreSQL and MinIO data
+- Rotate secrets/tokens regularly
+- Monitor docker and nginx logs
+
+## Desktop distribution for self-hosted users
+
+- <https://github.com/zentra-chat/zentra-desktop/releases/latest>
+
+Linux users may also install via AUR:
+
+```bash
+yay -S zentra-desktop-bin
+```

@@ -1,4 +1,4 @@
-# Zentra Peridotite API Documentation
+# Zentra API Documentation
 
 Welcome to the Zentra backend API documentation. This document covers RESTful endpoints, request/response JSON structures, and real-time WebSocket communication.
 
