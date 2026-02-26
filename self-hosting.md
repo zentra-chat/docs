@@ -31,7 +31,6 @@ Each folder is its own git repo. Clone them under one root:
 mkdir -p ~/Zentra && cd ~/Zentra
 git clone https://github.com/zentra-chat/peridotite.git backend
 git clone --recursive https://github.com/zentra-chat/selenite.git frontend
-git clone https://github.com/zentra-chat/zentra-docs.git docs
 ```
 
 ## Backend deploy script
