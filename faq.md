@@ -38,13 +38,14 @@ Yes. Login supports optional TOTP codes when 2FA is enabled on the account.
 
 ## Can I run multiple local instances?
 
-Yes. From `backend/` you can launch a second isolated local stack:
+Yes. From `backend/` you can launch a second isolated local stack with a separate Compose project name:
 
 ```bash
-scripts/instance-local.sh up --name test2
+docker compose --project-name zentra-test2 up -d --build
+docker compose --project-name zentra-test2 run --rm migrate up
 ```
 
-This is the recommended script for local multi-instance testing.
+If needed, use a separate env file with different host ports for the second stack.
 
 ## Where is the API reference?
 

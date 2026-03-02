@@ -58,11 +58,11 @@ From `backend/`:
 
 ```bash
 cp .env.example .env
-docker-compose up -d
-make migrate-up
+docker compose up -d postgres redis minio
+docker compose run --rm migrate up
 ```
 
-If `make` is unavailable, run the migration script directly.
+This starts infra only. Keep API running through `air` for hot reload.
 
 ## 3) Run backend API (recommended: air)
 
@@ -102,11 +102,12 @@ pnpm tauri dev
 
 ## 6) Run a second backend instance (multi-instance testing)
 
-Use the provided script:
+Use a second Compose project name:
 
 ```bash
 cd backend
-scripts/instance-local.sh up --name test2
+docker compose --project-name zentra-test2 up -d --build
+docker compose --project-name zentra-test2 run --rm migrate up
 ```
 
 ## Common local URLs
@@ -116,6 +117,6 @@ scripts/instance-local.sh up --name test2
 
 ## Troubleshooting quick checks
 
-- Verify containers: `docker-compose ps`
+- Verify containers: `docker compose ps`
 - Ensure migrations were applied before auth/messaging tests
 - Check backend logs first when frontend requests fail

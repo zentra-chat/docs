@@ -38,7 +38,7 @@ git clone --recursive https://github.com/zentra-chat/zentra-desktop.git desktop
 ## Recommended Local Dev Tools
 
 - **air** for backend hot reload
-- `scripts/instance-local.sh` for spinning additional backend instances
+- Docker Compose project names (`docker compose --project-name <name> ...`) for additional backend instances
 - `scripts/deploy-frontend.sh` for production-like frontend build+host testing
 
 ## Desktop development note

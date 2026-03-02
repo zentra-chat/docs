@@ -33,51 +33,36 @@ git clone https://github.com/zentra-chat/peridotite.git backend
 git clone --recursive https://github.com/zentra-chat/selenite.git frontend
 ```
 
-## Backend deploy script
+## Backend Docker Compose deployment
 
-Use the backend deployment script:
+Use standard Docker Compose commands from `backend/`:
 
 ```bash
 cd ~/Zentra/backend
-scripts/deploy-instance.sh deploy --name prod-main --domain https://api.example.com --skip-docker-install
-```
-
-### Backend script actions
-
-- `deploy` (default)
-- `rebuild-api`
-- `relaunch-api`
-- `wipe-db`
-- `update-restart`
-- `down`
-
-### Backend script arguments
-
-- `--name <instance>` (required)
-- `--domain <url>` (public API base URL)
-- `--api-port <port>` default `63566`
-- `--postgres-port <port>` default `5432`
-- `--redis-port <port>` default `6379`
-- `--minio-port <port>` default `9000`
-- `--minio-console-port <port>` default `9001`
-- `--cors-origins <csv>`
-- `--discord-import-token <token>`
-- `--force-regenerate-env`
-- `--skip-docker-install`
-
-Show help:
-
-```bash
-scripts/deploy-instance.sh --help
+cp .env.example .env
+docker compose up -d postgres redis minio
+docker compose run --rm migrate up
+docker compose up -d --build api
 ```
 
 ### Useful backend lifecycle commands
 
 ```bash
-scripts/deploy-instance.sh rebuild-api --name prod-main
-scripts/deploy-instance.sh relaunch-api --name prod-main
-scripts/deploy-instance.sh update-restart --name prod-main
-scripts/deploy-instance.sh down --name prod-main
+docker compose ps
+docker compose logs -f api
+docker compose up -d --build
+docker compose down
+docker compose down -v
+```
+
+### Migration commands
+
+```bash
+# apply pending migrations
+docker compose run --rm migrate up
+
+# rollback one migration
+docker compose run --rm migrate down 1
 ```
 
 ## Frontend deployment script

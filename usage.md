@@ -30,15 +30,19 @@ If you still need setup help, see [Development Introduction](/development/introd
 
 ## Running Multiple Instances (Local)
 
-To test cross-instance behavior locally, from `backend/`:
+To test cross-instance behavior locally, start an additional Compose project from `backend/`:
 
 ```bash
-scripts/instance-local.sh up --name test2
+docker compose --project-name zentra-test2 up -d --build
 ```
 
-This launches another isolated stack on separate ports.
+If you run more than one local stack on the same machine, set different host ports in an env file before starting the second stack.
 
-This script-based approach is recommended over manual duplicate docker-compose setups.
+Run migrations for that stack using the same project name:
+
+```bash
+docker compose --project-name zentra-test2 run --rm migrate up
+```
 
 ## Frontend Host Deployment Workflow
 
