@@ -208,26 +208,4 @@ Test renewal:
 sudo certbot renew --dry-run
 ```
 
-Check renewal timer:
-
-```bash
-systemctl list-timers | grep certbot
-```
-
-## Security checklist
-
-- Store secrets in env files and never commit them
-- Restrict firewall to `22`, `80`, `443`
-- Back up PostgreSQL and MinIO data
-- Rotate secrets/tokens regularly
-- Monitor docker and nginx logs
-
-## Desktop distribution for self-hosted users
-
-- <https://github.com/zentra-chat/zentra-desktop/releases/latest>
-
-Linux users may also install via AUR:
-
-```bash
-yay -S zentra-desktop-bin
-```
+That's it! You should now have your own instance of zentra deployed locally, if you have any issues with this documentation or with installing zentra, feel free to reach out in the zentra development discord or create a github issue.

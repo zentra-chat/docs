@@ -21,7 +21,7 @@ git clone --recursive https://github.com/zentra-chat/zentra-desktop.git desktop
 - Docker + Docker Compose
 - Go `1.23+`
 - Node.js `20+`
-- `pnpm`
+- pnpm
 
 ### Install commands (Ubuntu/Debian)
 
@@ -87,11 +87,14 @@ pnpm install
 pnpm dev
 ```
 
-If `5173` is already used, Vite automatically picks the next available port.
+The app will then be available at http://localhost:5173. If `5173` is already used, Vite automatically picks the next available port.
 
 ## 5) Optional desktop development
 
 Desktop development requires Tauri + Tauri system dependencies, and is only needed if you work on the desktop app.
+
+Tauri dependencies can be installed here:
+https://v2.tauri.app/start/prerequisites/
 
 From `desktop/`:
 
@@ -99,6 +102,8 @@ From `desktop/`:
 pnpm install
 pnpm tauri dev
 ```
+
+This will create a window where you can view the app, this will also start the frontend for web access at http://localhost:5173. If `5173` is already used, Vite automatically picks the next available port, if you started both the frontend as and desktop, it will be located at http://localhost:5174.
 
 ## 6) Run a second backend instance (multi-instance testing)
 
@@ -114,9 +119,3 @@ docker compose --project-name zentra-test2 run --rm migrate up
 
 - Frontend dev: `http://localhost:5173`
 - Primary backend API: `http://localhost:8080`
-
-## Troubleshooting quick checks
-
-- Verify containers: `docker compose ps`
-- Ensure migrations were applied before auth/messaging tests
-- Check backend logs first when frontend requests fail

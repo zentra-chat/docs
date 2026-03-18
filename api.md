@@ -1,6 +1,6 @@
 # Zentra API Documentation
 
-Welcome to the Zentra backend API documentation. This document covers RESTful endpoints, request/response JSON structures, and real-time WebSocket communication.
+Welcome to the Zentra backend API documentation. This document covers the RESTful endpoints, request/response JSON structures, and real-time WebSocket communication structure for zentra.
 
 ## Table of Contents
 - [General Information](#general-information)
@@ -13,7 +13,6 @@ Welcome to the Zentra backend API documentation. This document covers RESTful en
 - [Media & Uploads](#media--uploads)
 - [WebSocket (Real-time)](#websocket-real-time)
 
----
 
 ## General Information
 
@@ -41,11 +40,9 @@ Welcome to the Zentra backend API documentation. This document covers RESTful en
   {
     "error": "Short description of the error",
     "code": "ERROR_CODE",
-    "details": { ... } // Optional object for validation errors
+    "details": { ... } // Object for validation errors
   }
   ```
-
----
 
 ## Common Data Models
 
@@ -122,8 +119,6 @@ These models represent the structure of the JSON objects returned in the `data` 
 }
 ```
 
----
-
 ## Authentication
 
 ### Register
@@ -176,8 +171,6 @@ These models represent the structure of the JSON objects returned in the `data` 
 - **Request**: `{"refreshToken": "string"}`
 - **Response**: `AuthResponse`
 
----
-
 ## User Management
 
 ### Get Current User
@@ -223,8 +216,6 @@ These models represent the structure of the JSON objects returned in the `data` 
 - **Path**: `GET /users/search?q={query}&page=1&pageSize=20` (Auth required)
 - **Response**: `PaginatedResponse<User (Public)>`
 
----
-
 ## Communities
 
 ### Discover
@@ -258,8 +249,6 @@ These models represent the structure of the JSON objects returned in the `data` 
 - **Join with Invite**: `POST /communities/join/{code}` (Auth required)
   - **Response**: `{"data": { ...Community... }}`
 
----
-
 ## Channels & Categories
 
 ### Categories
@@ -290,8 +279,6 @@ These models represent the structure of the JSON objects returned in the `data` 
 - `PUT /channels/{id}/permissions` - Set permission overwrite
 - `DELETE /channels/{id}/permissions/{targetType}/{targetId}` - Remove overwrite
 
----
-
 ## Messages & Reactions
 
 ### Fetching Messages
@@ -320,8 +307,6 @@ These models represent the structure of the JSON objects returned in the `data` 
 - `POST /messages/{id}/pin` - Pin message
 - `DELETE /messages/{id}/pin` - Unpin message
 
----
-
 ## Media & Uploads
 
 Files are uploaded first to obtain an ID, which can then be attached to messages or used for profile assets.
@@ -347,8 +332,6 @@ Files are uploaded first to obtain an ID, which can then be attached to messages
   - Videos: MP4, WebM, QuickTime
   - Audio: MP3, OGG, WAV
   - Documents: PDF, TXT, ZIP, RAR, 7Z
-
----
 
 ## WebSocket (Real-time)
 

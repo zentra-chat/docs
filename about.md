@@ -2,13 +2,14 @@
 
 Zentra is a modern chat platform focused on privacy, ownership, and self-hosting.
 
-It is designed for communities that want Discord-like UX while keeping control over their infrastructure and data.
+It is designed for communities that want a Discord-like UX while keeping control over their infrastructure and data.
 
 ## Project Goals
 
 - **Open source by default**: transparent code and community contributions
 - **Encrypted communication**: strong security posture and private DMs
 - **Self-hostable architecture**: run your own backend and frontend
+- **Centralised Main Server**: zentra hosted server for easy access
 - **Cross-platform clients**: web and desktop support
 
 ## Main Components

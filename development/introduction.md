@@ -15,12 +15,12 @@ git clone --recursive https://github.com/zentra-chat/zentra-desktop.git desktop
 
 ## Repository Layout
 
-- `backend/` — Go API gateway, auth, communities, messaging, WebSocket services
-- `frontend/` — SvelteKit web app
-- `desktop/` — frontend submodule wrapped by Tauri
-- `docs/` — Documentation source files
+- `backend/`: Go API gateway, auth, communities, messaging, WebSocket services
+- `frontend/`: SvelteKit web app
+- `desktop/`: frontend submodule wrapped by Tauri
+- `docs/`: Documentation source files
 
-## Core Runtime Stack
+## Runtime Stack
 
 - **Backend language:** Go 1.23+
 - **Frontend:** Node.js 20+ with `pnpm`
