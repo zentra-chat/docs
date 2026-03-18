@@ -8,6 +8,8 @@ Use these docs to set up local development, self-host production infrastructure,
 
 - [Development Introduction](/development/introduction)
 - [Local Development Setup](/development/local-setup)
+- [Plugin Development Guide](/development/plugin-development)
+- [Plugin System Overview](/plugins)
 - [Installation](/installation)
 - [Self-Hosting Guide](/self-hosting)
 - [Usage Guide](/usage)
