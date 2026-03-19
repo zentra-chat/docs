@@ -10,7 +10,7 @@ Each folder is its own Git repo. Clone them under one root and open that root in
 mkdir -p ~/Zentra && cd ~/Zentra
 git clone https://github.com/zentra-chat/peridotite.git backend
 git clone --recursive https://github.com/zentra-chat/selenite.git frontend
-git clone --recursive https://github.com/zentra-chat/zentra-desktop.git desktop
+git clone --recursive https://github.com/zentra-chat/desktop.git desktop
 ```
 
 ## 1) Install prerequisites

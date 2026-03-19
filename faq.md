@@ -24,7 +24,7 @@ air
 
 ## How do I install the desktop app?
 
-Use the [latest GitHub desktop release assets](https://github.com/zentra-chat/zentra-desktop/releases/latest).
+Use the [latest GitHub desktop release assets](https://github.com/zentra-chat/desktop/releases/latest).
 
 Linux users can also install from AUR:
 

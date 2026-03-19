@@ -10,7 +10,7 @@ Each project is its own Git repository. Clone them side-by-side under one root f
 mkdir -p ~/Zentra && cd ~/Zentra
 git clone https://github.com/zentra-chat/peridotite.git backend
 git clone --recursive https://github.com/zentra-chat/selenite.git frontend
-git clone --recursive https://github.com/zentra-chat/zentra-desktop.git desktop
+git clone --recursive https://github.com/zentra-chat/desktop.git desktop
 ```
 
 ## Repository Layout

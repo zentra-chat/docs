@@ -6,7 +6,7 @@ This page covers client installation. For infrastructure deployment, use [Self-H
 
 Download latest desktop builds from GitHub Releases:
 
-- [Latest Release Assets](https://github.com/zentra-chat/zentra-desktop/releases/latest)
+- [Latest Release Assets](https://github.com/zentra-chat/desktop/releases/latest)
 
 Supported packages:
 
