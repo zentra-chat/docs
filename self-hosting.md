@@ -1,136 +1,109 @@
 # Self-Hosting Guide
 
-This page covers deploying Zentra for real usage, not just local dev.
+This guide covers deploying Zentra for production use.
 
-## What you need
+## Prerequisites
 
-- A Linux host/VM
-- Public DNS entries for API and frontend
+- Linux host (VM or bare metal)
+- Domain with DNS pointing to your server
 - Nginx reverse proxy
-- TLS certificates (Let's Encrypt / Certbot)
-- Persistent storage for PostgreSQL and MinIO
+- Docker and Docker Compose
+- Open ports 80 and 443 on your firewall
 
-## Install commands
+## Server Setup
 
-Run these first on your server:
+Install required packages:
 
 ```bash
 sudo apt update
-sudo apt install -y git curl nginx certbot python3-certbot-nginx postgresql-client ca-certificates gnupg lsb-release
+sudo apt install -y nginx certbot python3-certbot-nginx
+```
+
+Install Docker if not already installed:
+
+```bash
 curl -fsSL https://get.docker.com | sh
 sudo usermod -aG docker "$USER"
 ```
 
-Log out and back in so Docker group membership is applied.
+Log out and back in for Docker group to take effect.
 
-## Clone repos side-by-side
+## Clone Repositories
 
-Each folder is its own git repo. Clone them under one root:
+Create a deployment directory and clone both repos:
 
 ```bash
 mkdir -p ~/Zentra && cd ~/Zentra
 git clone https://github.com/zentra-chat/peridotite.git backend
-git clone --recursive https://github.com/zentra-chat/web.git frontend
+git clone --recursive https://github.com/zentra-chat/selenite.git frontend
 ```
 
-## Backend Docker Compose deployment
-
-Use standard Docker Compose commands from `backend/`:
+## Configure Backend
 
 ```bash
 cd ~/Zentra/backend
 cp .env.example .env
+```
+
+Edit `.env` with your production values.
+
+Generate secrets with:
+```bash
+openssl rand -hex 32 # JWT Secret
+openssl rand -hex 64 # Encryption Key
+```
+
+Start infrastructure services:
+
+```bash
 docker compose up -d postgres redis minio
+```
+
+Wait for containers to be healthy, then run migrations:
+
+```bash
 docker compose run --rm migrate up
+```
+
+Start the API:
+
+```bash
 docker compose up -d --build api
 ```
 
-### Useful backend lifecycle commands
-
-```bash
-docker compose ps
-docker compose logs -f api
-docker compose up -d --build
-docker compose down
-docker compose down -v
-```
-
-### Migration commands
-
-```bash
-# apply pending migrations
-docker compose run --rm migrate up
-
-# rollback one migration
-docker compose run --rm migrate down 1
-```
-
-## Frontend deployment script
+## Configure Frontend
 
 ```bash
 cd ~/Zentra/frontend
+```
+
+Deploy with your instance URL:
+
+```bash
 ./scripts/deploy-frontend.sh deploy \
-  --instance-url https://api.example.com \
-  --instance-name "Zentra Main" \
+  --instance-url https://your-api.example.com \
+  --instance-name "Your Instance Name" \
   --port 4173
 ```
 
-### Frontend script arguments
-
-Deploy action:
-
-- `--port <port>` (default `4173`)
-- `--instance-url <url>`
-- `--instance-name <name>`
-- `--skip-install`
-- `--skip-go-build`
-
-Update action:
-
-- `--branch <branch>` (default `main`)
-- `--remote <remote>` (default `origin`)
-- `--rebuild-go-host`
-
-Show help:
+Start the frontend:
 
 ```bash
-./scripts/deploy-frontend.sh --help
+./dist/run-frontend.sh
 ```
 
-Fast update:
+## Nginx Configuration
 
-```bash
-./scripts/deploy-frontend.sh update --branch main
-```
+Create `/etc/nginx/sites-available/zentra` for your domain. Replace the domain names and local ports with your own.
 
-## Reverse proxy / forwarding
-
-### Topology
-
-- `zentra.abstractmelon.net` -> frontend host (`localhost:3014` in your setup)
-- `zentra-main.abstractmelon.net` -> backend API (`localhost:63566` in your setup)
-
-### Home lab router forwarding
-
-If hosted behind a home router, forward only:
-
-- TCP `80` -> reverse proxy machine
-- TCP `443` -> reverse proxy machine
-
-Do **not** expose internal ports like `5432`, `6379`, or `9000` publicly.
-
-### Nginx configs
-
-These are **example** configs from Zentra Main and should be adjusted for your own domains and local ports.
-
-Frontend domain (`zentra.abstractmelon.net`):
+Frontend (serving on port 4173):
 
 ```nginx
 server {
-    server_name zentra.abstractmelon.net;
+    server_name your-frontend.example.com;
 
     location / {
-        proxy_pass http://localhost:3014;
+        proxy_pass http://localhost:4173;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -139,14 +112,14 @@ server {
 }
 ```
 
-API domain (`zentra-main.abstractmelon.net`):
+Backend API (serving on port 8080):
 
 ```nginx
 server {
-    server_name zentra-main.abstractmelon.net;
+    server_name your-api.example.com;
 
     location / {
-        proxy_pass http://localhost:63566;
+        proxy_pass http://localhost:8080;
 
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -184,28 +157,98 @@ server {
 }
 ```
 
-Enable + reload nginx:
+Enable the site and reload nginx:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/zentra.abstractmelon.net /etc/nginx/sites-enabled/zentra.abstractmelon.net
-sudo ln -s /etc/nginx/sites-available/zentra-main.abstractmelon.net /etc/nginx/sites-enabled/zentra-main.abstractmelon.net
+sudo ln -s /etc/nginx/sites-available/zentra /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-## Let's Encrypt / Certbot commands
+## SSL Certificates
 
-Issue certs:
+Request certificates from Let's Encrypt:
 
 ```bash
-sudo certbot --nginx -d zentra.abstractmelon.net
-sudo certbot --nginx -d zentra-main.abstractmelon.net
+sudo certbot --nginx -d your-frontend.example.com -d your-api.example.com
 ```
 
-Test renewal:
+Certbot auto-renews certificates. Test renewal with:
 
 ```bash
 sudo certbot renew --dry-run
 ```
 
-That's it! You should now have your own instance of zentra deployed locally, if you have any issues with this documentation or with installing zentra, feel free to reach out in the zentra development discord or create a github issue.
+## Updating Your Instance
+
+### Backend
+
+```bash
+cd ~/Zentra/backend
+
+# Pull latest code
+git fetch origin
+git pull origin main
+
+# Migrate database to the latest version
+docker compose run --rm migrate up
+
+# Rebuild and restart
+docker compose up -d --build api
+```
+
+### Frontend
+
+```bash
+cd ~/Zentra/frontend
+
+# Pull latest code
+git fetch origin
+git pull origin main
+
+# Rebuild
+./scripts/deploy-frontend.sh update
+```
+
+Restart the frontend process after updating. If using systemd or a process manager, restart the relevant service.
+
+### Submodules
+
+The frontend has submodules. During updates they will sync automatically, but you can update manually:
+
+```bash
+cd ~/Zentra/frontend
+git submodule sync --recursive
+git submodule update --init --recursive
+```
+
+## Common Commands
+
+### Backend
+
+```bash
+# View status
+docker compose ps
+
+# View logs
+docker compose logs -f api
+
+# Stop
+docker compose down
+
+# Stop and remove data
+docker compose down -v
+
+# Run migrations
+docker compose run --rm migrate up
+docker compose run --rm migrate down 1
+```
+
+### Frontend
+
+```bash
+# View help
+./scripts/deploy-frontend.sh --help
+```
+
+For help, open an issue on GitHub or reach out in the Zentra Discord.
