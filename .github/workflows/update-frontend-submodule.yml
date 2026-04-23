@@ -1,0 +1,34 @@
+name: Update Frontend Submodule
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-submodule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Frontend Repo
+        uses: actions/checkout@v4
+        with:
+          repository: zentra-chat/frontend
+          token: ${{ secrets.FRONTEND_TOKEN }}
+          submodules: true
+          fetch-depth: 0
+
+      - name: Update Submodule
+        run: |
+          git submodule update --remote --init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Create Commit if Changed
+        run: |
+          if git diff --quiet HEAD docs/; then
+            echo "No changes to submodule"
+          else
+            git add docs/
+            git commit -m "chore: sync docs to latest"
+            git push origin main
+          fi
