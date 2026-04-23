@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Frontend Repo
         uses: actions/checkout@v4
         with:
-          repository: zentra-chat/frontend
+          repository: zentra-chat/web
           token: ${{ secrets.FRONTEND_TOKEN }}
           submodules: true
           fetch-depth: 0
