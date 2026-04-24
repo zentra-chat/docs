@@ -14,8 +14,8 @@ It is designed for communities that want a Discord-like UX while keeping control
 
 ## Main Components
 
-- **Backend (`peridotite`)**: Go API + WebSocket gateway
-- **Frontend (`selenite`)**: SvelteKit app
+- **Backend**: Go API + WebSocket gateway
+- **Frontend**: SvelteKit app
 - **Desktop app**: Tauri wrapper around the same frontend
 - **Data layer**: PostgreSQL, Redis, and MinIO
 

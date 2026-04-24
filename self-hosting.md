@@ -34,14 +34,14 @@ Create a deployment directory and clone both repos:
 
 ```bash
 mkdir -p ~/Zentra && cd ~/Zentra
-git clone https://github.com/zentra-chat/peridotite.git backend
-git clone --recursive https://github.com/zentra-chat/selenite.git frontend
+git clone https://github.com/zentra-chat/server.git server
+git clone --recursive https://github.com/zentra-chat/web.git web
 ```
 
-## Configure Backend
+## Configure server
 
 ```bash
-cd ~/Zentra/backend
+cd ~/Zentra/server
 cp .env.example .env
 ```
 
@@ -74,7 +74,7 @@ docker compose up -d --build api
 ## Configure Frontend
 
 ```bash
-cd ~/Zentra/frontend
+cd ~/Zentra/web
 ```
 
 Deploy with your instance URL:

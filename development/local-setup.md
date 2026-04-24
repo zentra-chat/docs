@@ -8,7 +8,7 @@ Each folder is its own Git repo. Clone them under one root and open that root in
 
 ```bash
 mkdir -p ~/Zentra && cd ~/Zentra
-git clone https://github.com/zentra-chat/peridotite.git backend
+git clone https://github.com/zentra-chat/server.git backend
 git clone --recursive https://github.com/zentra-chat/web.git frontend
 git clone --recursive https://github.com/zentra-chat/desktop.git desktop
 ```
