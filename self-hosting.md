@@ -48,6 +48,7 @@ cp .env.example .env
 Edit `.env` with your production values.
 
 Generate secrets with:
+
 ```bash
 openssl rand -hex 32 # JWT Secret
 openssl rand -hex 64 # Encryption Key

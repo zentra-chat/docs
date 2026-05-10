@@ -28,24 +28,24 @@ Use `definePlugin` and export `register`:
 import { definePlugin, type ZentraPluginSDK } from '@zentra-chat/plugin-sdk';
 
 export const register = definePlugin((sdk: ZentraPluginSDK) => {
-  sdk.registerHeaderAction({
-    id: 'my-action',
-    title: 'My Action',
-    icon: 'zap',
-    onClick: () => {
-      sdk.ui.addToast({ type: 'info', message: 'Action clicked' });
-    }
-  });
+	sdk.registerHeaderAction({
+		id: 'my-action',
+		title: 'My Action',
+		icon: 'zap',
+		onClick: () => {
+			sdk.ui.addToast({ type: 'info', message: 'Action clicked' });
+		}
+	});
 
-  sdk.registerChannelType({
-    id: 'my-channel-type',
-    icon: 'hash',
-    viewComponent: () => import('./MyChannelView.svelte'),
-    label: 'My Channel',
-    description: 'Custom channel type from plugin',
-    showHash: true,
-    headerActionIds: ['my-action']
-  });
+	sdk.registerChannelType({
+		id: 'my-channel-type',
+		icon: 'hash',
+		viewComponent: () => import('./MyChannelView.svelte'),
+		label: 'My Channel',
+		description: 'Custom channel type from plugin',
+		showHash: true,
+		headerActionIds: ['my-action']
+	});
 });
 ```
 
@@ -55,16 +55,16 @@ Start with a minimal manifest:
 
 ```json
 {
-  "slug": "my-plugin",
-  "name": "My Plugin",
-  "version": "1.0.0",
-  "description": "Example plugin",
-  "author": "you",
-  "channelTypes": ["my-channel-type"],
-  "commands": [],
-  "triggers": [],
-  "hooks": [],
-  "frontendBundle": "dist/my-plugin.js"
+	"slug": "my-plugin",
+	"name": "My Plugin",
+	"version": "1.0.0",
+	"description": "Example plugin",
+	"author": "you",
+	"channelTypes": ["my-channel-type"],
+	"commands": [],
+	"triggers": [],
+	"hooks": [],
+	"frontendBundle": "dist/my-plugin.js"
 }
 ```
 

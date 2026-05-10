@@ -3,6 +3,7 @@
 Welcome to the Zentra backend API documentation. This document covers the RESTful endpoints, request/response JSON structures, and real-time WebSocket communication structure for zentra.
 
 ## Table of Contents
+
 - [General Information](#general-information)
 - [Common Data Models](#common-data-models)
 - [Authentication](#authentication)
@@ -12,7 +13,6 @@ Welcome to the Zentra backend API documentation. This document covers the RESTfu
 - [Messages & Reactions](#messages--reactions)
 - [Media & Uploads](#media--uploads)
 - [WebSocket (Real-time)](#websocket-real-time)
-
 
 ## General Information
 
@@ -49,53 +49,57 @@ Welcome to the Zentra backend API documentation. This document covers the RESTfu
 These models represent the structure of the JSON objects returned in the `data` field.
 
 ### User (Public)
+
 ```json
 {
-  "id": "uuid",
-  "username": "string",
-  "displayName": "string | null",
-  "avatarUrl": "string | null",
-  "bio": "string | null",
-  "status": "online | away | busy | invisible | offline",
-  "customStatus": "string | null"
+	"id": "uuid",
+	"username": "string",
+	"displayName": "string | null",
+	"avatarUrl": "string | null",
+	"bio": "string | null",
+	"status": "online | away | busy | invisible | offline",
+	"customStatus": "string | null"
 }
 ```
 
 ### Community
+
 ```json
 {
-  "id": "uuid",
-  "name": "string",
-  "description": "string | null",
-  "iconUrl": "string | null",
-  "bannerUrl": "string | null",
-  "ownerId": "uuid",
-  "isPublic": "boolean",
-  "isOpen": "boolean",
-  "memberCount": "number",
-  "createdAt": "iso-date",
-  "updatedAt": "iso-date"
+	"id": "uuid",
+	"name": "string",
+	"description": "string | null",
+	"iconUrl": "string | null",
+	"bannerUrl": "string | null",
+	"ownerId": "uuid",
+	"isPublic": "boolean",
+	"isOpen": "boolean",
+	"memberCount": "number",
+	"createdAt": "iso-date",
+	"updatedAt": "iso-date"
 }
 ```
 
 ### Channel
+
 ```json
 {
-  "id": "uuid",
-  "communityId": "uuid",
-  "categoryId": "uuid | null",
-  "name": "string",
-  "topic": "string | null",
-  "type": "text | announcement | gallery | forum",
-  "position": "number",
-  "isNsfw": "boolean",
-  "slowmodeSeconds": "number",
-  "createdAt": "iso-date",
-  "updatedAt": "iso-date"
+	"id": "uuid",
+	"communityId": "uuid",
+	"categoryId": "uuid | null",
+	"name": "string",
+	"topic": "string | null",
+	"type": "text | announcement | gallery | forum",
+	"position": "number",
+	"isNsfw": "boolean",
+	"slowmodeSeconds": "number",
+	"createdAt": "iso-date",
+	"updatedAt": "iso-date"
 }
 ```
 
 ### Message
+
 ```json
 {
   "id": "uuid",
@@ -122,13 +126,14 @@ These models represent the structure of the JSON objects returned in the `data` 
 ## Authentication
 
 ### Register
+
 - **Path**: `POST /auth/register`
 - **Request**:
   ```json
   {
-    "username": "string",
-    "email": "string",
-    "password": "string"
+  	"username": "string",
+  	"email": "string",
+  	"password": "string"
   }
   ```
 - **Response**: `AuthResponse`
@@ -144,13 +149,14 @@ These models represent the structure of the JSON objects returned in the `data` 
   ```
 
 ### Login
+
 - **Path**: `POST /auth/login`
 - **Request**:
   ```json
   {
-    "login": "username_or_email",
-    "password": "string",
-    "totpCode": "string" // Optional
+  	"login": "username_or_email",
+  	"password": "string",
+  	"totpCode": "string" // Optional
   }
   ```
 - **Response**: `AuthResponse`
@@ -167,6 +173,7 @@ These models represent the structure of the JSON objects returned in the `data` 
   ```
 
 ### Refresh Token
+
 - **Path**: `POST /auth/refresh`
 - **Request**: `{"refreshToken": "string"}`
 - **Response**: `AuthResponse`
@@ -174,68 +181,77 @@ These models represent the structure of the JSON objects returned in the `data` 
 ## User Management
 
 ### Get Current User
+
 - **Path**: `GET /users/me` (Auth required)
 - **Response**: `{"data": { ...Full User... }}`
 
 ### Update Profile
+
 - **Path**: `PATCH /users/me` (Auth required)
 - **Request**:
   ```json
   {
-    "displayName": "string | null",
-    "bio": "string | null",
-    "customStatus": "string | null"
+  	"displayName": "string | null",
+  	"bio": "string | null",
+  	"customStatus": "string | null"
   }
   ```
 - **Response**: `{"data": { ...Full User... }}`
 
 ### Update Status
+
 - **Path**: `PUT /users/me/status` (Auth required)
 - **Request**: `{"status": "online"}`
 - **Response**: `204 No Content`
 
 ### Get User Settings
+
 - **Path**: `GET /users/me/settings` (Auth required)
 - **Response**: `{"data": { ...UserSettings... }}`
 
 ### Update User Settings
+
 - **Path**: `PATCH /users/me/settings` (Auth required)
 - **Request**:
   ```json
   {
-    "theme": "string",
-    "notificationsEnabled": "boolean",
-    "soundEnabled": "boolean",
-    "compactMode": "boolean",
-    "settings": "object"
+  	"theme": "string",
+  	"notificationsEnabled": "boolean",
+  	"soundEnabled": "boolean",
+  	"compactMode": "boolean",
+  	"settings": "object"
   }
   ```
 - **Response**: `{"data": { ...UserSettings... }}`
 
 ### Search Users
+
 - **Path**: `GET /users/search?q={query}&page=1&pageSize=20` (Auth required)
 - **Response**: `PaginatedResponse<User (Public)>`
 
 ## Communities
 
 ### Discover
+
 - **Path**: `GET /communities/discover?q={query}&page=1&pageSize=20`
 - **Response**: `PaginatedResponse<Community>`
 
 ### Create
+
 - **Path**: `POST /communities` (Auth required)
 - **Request**:
   ```json
   {
-    "name": "string",
-    "description": "string | null",
-    "isPublic": "boolean",
-    "isOpen": "boolean"
+  	"name": "string",
+  	"description": "string | null",
+  	"isPublic": "boolean",
+  	"isOpen": "boolean"
   }
   ```
 - **Response**: `{"data": { ...Community... }}`
 
 ### Member Management
+
 - **List Members**: `GET /communities/{id}/members?page=1&pageSize=50` (Auth required)
   - **Response**: `PaginatedResponse<CommunityMemberWithUser>`
 - **Join**: `POST /communities/{id}/join` (Auth required)
@@ -244,6 +260,7 @@ These models represent the structure of the JSON objects returned in the `data` 
   - **Response**: `204 No Content`
 
 ### Invites
+
 - **Get Invite Info**: `GET /communities/invite/{code}` (Public)
   - **Response**: `{"data": { "community": { ...Community... }, "valid": true }}`
 - **Join with Invite**: `POST /communities/join/{code}` (Auth required)
@@ -252,6 +269,7 @@ These models represent the structure of the JSON objects returned in the `data` 
 ## Channels & Categories
 
 ### Categories
+
 - **List Categories**: `GET /communities/{communityId}/categories` (Auth required)
   - **Response**: `{"data": [ ...ChannelCategory... ]}`
 - **Create Category**: `POST /communities/{communityId}/categories` (Auth required)
@@ -259,22 +277,24 @@ These models represent the structure of the JSON objects returned in the `data` 
   - **Response**: `{"data": { ...ChannelCategory... }}`
 
 ### Channels
+
 - **List Channels**: `GET /communities/{communityId}/channels` (Auth required)
   - **Response**: `{"data": [ ...Channel... ]}`
 - **Create Channel**: `POST /communities/{communityId}/channels` (Auth required)
   - **Request**:
     ```json
     {
-      "name": "string",
-      "type": "text | announcement | gallery | forum",
-      "topic": "string | null",
-      "categoryId": "uuid | null",
-      "isNsfw": "boolean"
+    	"name": "string",
+    	"type": "text | announcement | gallery | forum",
+    	"topic": "string | null",
+    	"categoryId": "uuid | null",
+    	"isNsfw": "boolean"
     }
     ```
   - **Response**: `{"data": { ...Channel... }}`
 
 ### Channel Permissions
+
 - `GET /channels/{id}/permissions` - Get permission overwrites
 - `PUT /channels/{id}/permissions` - Set permission overwrite
 - `DELETE /channels/{id}/permissions/{targetType}/{targetId}` - Remove overwrite
@@ -282,17 +302,20 @@ These models represent the structure of the JSON objects returned in the `data` 
 ## Messages & Reactions
 
 ### Fetching Messages
+
 - `GET /messages/channels/{channelId}/messages?limit=50&before={id}&after={id}`
 - `GET /messages/channels/{channelId}/messages/pinned`
 - `GET /messages/channels/{channelId}/messages/search?q={query}`
 
 ### Sending & Editing
+
 - `POST /messages/channels/{channelId}/messages` - Send message
 - `PATCH /messages/{id}` - Edit message content
 - `DELETE /messages/{id}` - Delete message
 - `POST /messages/channels/{channelId}/messages/typing` - Send typing indicator
 
 **Send Message Request Body:**
+
 ```json
 {
   "content": "Hello world!",
@@ -302,6 +325,7 @@ These models represent the structure of the JSON objects returned in the `data` 
 ```
 
 ### Reactions & Pinning
+
 - `POST /messages/{id}/reactions` - Add reaction (`{"emoji": "�"}`)
 - `DELETE /messages/{id}/reactions/{emoji}` - Remove reaction
 - `POST /messages/{id}/pin` - Pin message
@@ -312,16 +336,19 @@ These models represent the structure of the JSON objects returned in the `data` 
 Files are uploaded first to obtain an ID, which can then be attached to messages or used for profile assets.
 
 ### Attachments
+
 - `POST /media/attachments` - Upload a file (Multipart form, field: `file`)
 - `GET /media/attachments/{id}` - Get attachment metadata
 - `GET /media/attachments/{id}/download` - Get a temporary download URL
 
 ### Avatars & Assets
+
 - `POST /media/avatars/user` - Upload user avatar (field: `avatar`)
 - `POST /media/avatars/community/{communityId}` - Upload community icon (field: `avatar`)
 - `POST /media/communities/{communityId}/banner` - Upload community banner (field: `banner`)
 
 ### Limits & Supported Types
+
 - **Max File Sizes**:
   - Avatars: 5MB
   - Community Banners: 10MB
@@ -338,6 +365,7 @@ Files are uploaded first to obtain an ID, which can then be attached to messages
 Connect to `/ws?token=<jwt>` to establish a persistent connection.
 
 ### Client Messages (Events)
+
 The client sends JSON messages in the format: `{"type": "EVENT_NAME", "data": { ... }}`
 
 - `SUBSCRIBE`: Subscribe to events for a specific channel.
@@ -345,6 +373,7 @@ The client sends JSON messages in the format: `{"type": "EVENT_NAME", "data": { 
 - `PRESENCE_UPDATE`: Manually update presence status.
 
 ### Server Events
+
 The server broadcasts events to relevant connected clients.
 
 - `READY`: Initial event upon connection, contains user session info.

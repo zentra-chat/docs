@@ -20,7 +20,7 @@ Use these docs to set up local development, self-host production infrastructure,
 
 - **Web frontend** built with SvelteKit
 - **Desktop app** built with Tauri
-- **Backend API** built in Go 
+- **Backend API** built in Go
 - **PostgreSQL + Redis + MinIO** for storage, caching, and media
 
 ## Need help fast?
